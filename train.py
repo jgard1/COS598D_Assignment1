@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from tqdm import tqdm
 
-def train(model, loss, optimizer, dataloader, device, epoch, verbose, log_interval=10):\
+def train(model, loss, optimizer, dataloader, device, epoch, verbose, log_interval=10):
     print("yeet, started train")
     model.train()
     total = 0
