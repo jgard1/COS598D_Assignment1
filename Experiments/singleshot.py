@@ -77,7 +77,7 @@ def run(args):
 
     stop = timeit.default_timer()
 
-    total_time = stop - start
+    total_time = df = pd.DataFrame([stop - start])
 
 
     ## Save Results and Model ##
