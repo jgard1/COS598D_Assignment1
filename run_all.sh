@@ -11,7 +11,7 @@ do
 done
 # have to deal with magnitue pruning seperately because the pre-epochs needs to be set to 200
 # python main.py --model-class lottery --model vgg16 --dataset cifar10 --experiment multishot --pruner mag --compression 1 --pre-epochs 200 cifar_mag
-python main.py --model-class default --model fc --dataset mnist --experiment multishot --pruner mag --compression 1 --pre-epochs 200 mnist_mag
+python main.py --model-class default --model fc --dataset mnist --experiment multishot --pruner-list mag --compression-list 1 --pre-epochs 200 --expid mnist_mag --post-epoch 10 --level-list 1
 
 # second set of experiments 
 MAG = "mag"
@@ -22,5 +22,5 @@ do
     do
           python main.py --model-class lottery --model vgg16 --dataset cifar10 --experiment singleshot --pruner synflow --compression $COMPRESSION --expid $COMPRESSION$CIFAR$PRUNER_NAME --post-epoch 100
     done
-    python main.py --model-class lottery --model vgg16 --dataset cifar10 --experiment singleshot --pruner mag --compression $COMPRESSION --pre-epochs 200 $COMPRESSION$CIFAR$MAG
+    python main.py --model-class lottery --model vgg16 --dataset cifar10 --experiment multishot --pruner mag --compression $COMPRESSION --pre-epochs 200 --expid $COMPRESSION$CIFAR$MAG --post-epoch 100 --level-list 1
 done

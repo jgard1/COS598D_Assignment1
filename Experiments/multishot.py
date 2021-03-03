@@ -90,7 +90,7 @@ def run(args):
 
             stop = timeit.default_timer()
 
-            total_time = stop - start
+            total_time = [stop - start]
             
             # Save Data
             total_time.to_pickle("{}/total_time.pkl".format(args.result_dir))
