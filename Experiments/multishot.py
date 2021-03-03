@@ -7,6 +7,7 @@ from Utils import generator
 from Utils import metrics
 from train import *
 from prune import *
+import timeit
 
 def run(args):
     if not args.save:
@@ -81,8 +82,18 @@ def run(args):
             # Train Model
             post_result = train_eval_loop(model, loss, optimizer, scheduler, train_loader, 
                                           test_loader, device, args.post_epochs, args.verbose)
+
+            start = timeit.default_timer()
+
+            #The module that you try to calculate the running time
+            _, _, _ = eval(model, loss, test_loader, device, args.verbose)
+
+            stop = timeit.default_timer()
+
+            total_time = stop - start
             
             # Save Data
+            total_time.to_pickle("{}/total_time.pkl".format(args.result_dir))
             post_result.to_pickle("{}/post-train-{}-{}-{}.pkl".format(args.result_dir, args.pruner, str(compression),  str(level)))
             prune_result.to_pickle("{}/compression-{}-{}-{}.pkl".format(args.result_dir, args.pruner, str(compression), str(level)))
 

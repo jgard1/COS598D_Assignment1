@@ -7,6 +7,7 @@ from Utils import generator
 from Utils import metrics
 from train import *
 from prune import *
+import timeit
 
 def run(args):
     ## Random Seed and Device ##
@@ -50,7 +51,9 @@ def run(args):
     post_result = train_eval_loop(model, loss, optimizer, scheduler, train_loader, 
                                   test_loader, device, args.post_epochs, args.verbose) 
 
-    print("dank memes, the post-training is done")
+    #get the time data for the table
+
+
     ## Display Results ##
     frames = [pre_result.head(1), pre_result.tail(1), post_result.head(1), post_result.tail(1)]
     train_result = pd.concat(frames, keys=['Init.', 'Pre-Prune', 'Post-Prune', 'Final'])
@@ -67,9 +70,20 @@ def run(args):
     print("Parameter Sparsity: {}/{} ({:.4f})".format(total_params, possible_params, total_params / possible_params))
     print("FLOP Sparsity: {}/{} ({:.4f})".format(total_flops, possible_flops, total_flops / possible_flops))
 
+    start = timeit.default_timer()
+
+    #The module that you try to calculate the running time
+    _, _, _ = eval(model, loss, test_loader, device, args.verbose)
+
+    stop = timeit.default_timer()
+
+    total_time = stop - start
+
+
     ## Save Results and Model ##
     if args.save:
         print('Saving results.')
+        total_time.to_pickle("{}/total_time.pkl".format(args.result_dir))
         pre_result.to_pickle("{}/pre-train.pkl".format(args.result_dir))
         post_result.to_pickle("{}/post-train.pkl".format(args.result_dir))
         prune_result.to_pickle("{}/compression.pkl".format(args.result_dir))

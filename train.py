@@ -4,11 +4,11 @@ import numpy as np
 from tqdm import tqdm
 
 def train(model, loss, optimizer, dataloader, device, epoch, verbose, log_interval=10):
-    print("yeet, started train")
+    # print("yeet, started train")
     model.train()
     total = 0
     for batch_idx, (data, target) in enumerate(dataloader):
-        print("yeet, training on batch_idx: "+str(batch_idx))
+        # print("yeet, training on batch_idx: "+str(batch_idx))
         data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
         output = model(data)
@@ -20,19 +20,20 @@ def train(model, loss, optimizer, dataloader, device, epoch, verbose, log_interv
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 epoch, batch_idx * len(data), len(dataloader.dataset),
                 100. * batch_idx / len(dataloader), train_loss.item()))
-    print("yeet, training complete")
+    # print("yeet, training complete")
     return total / len(dataloader.dataset)
 
 def eval(model, loss, dataloader, device, verbose):
-    print("yeet, started eval")
+    # print("yeet, started eval")
     model.eval()
     total = 0
     correct1 = 0
     correct5 = 0
     with torch.no_grad():
-        josh_debug = 0 
+        # josh_debug = 0 
         for data, target in dataloader:
-            print("yeet, iterating in eval, iter number: "+str(josh_debug))
+            # print("yeet, iterating in eval, iter number: "+str(josh_debug))
+            # josh_debug += 1
             data, target = data.to(device), target.to(device)
             output = model(data)
             total += loss(output, target).item() * data.size(0)
@@ -49,11 +50,11 @@ def eval(model, loss, dataloader, device, verbose):
     return average_loss, accuracy1, accuracy5
 
 def train_eval_loop(model, loss, optimizer, scheduler, train_loader, test_loader, device, epochs, verbose):
-    print("yeet, entered train_eval_loop")
+    # print("yeet, entered train_eval_loop")
     test_loss, accuracy1, accuracy5 = eval(model, loss, test_loader, device, verbose)
     rows = [[np.nan, test_loss, accuracy1, accuracy5]]
     for epoch in tqdm(range(epochs)):
-        print("yeet, started epoch number: "+str(epoch))
+        # print("yeet, started epoch number: "+str(epoch))
         train_loss = train(model, loss, optimizer, train_loader, device, epoch, verbose)
         test_loss, accuracy1, accuracy5 = eval(model, loss, test_loader, device, verbose)
         row = [train_loss, test_loss, accuracy1, accuracy5]
